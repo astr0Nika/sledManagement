@@ -1,0 +1,62 @@
+﻿@page "/add-user"
+@using apec4_sledManagement.Library
+@using apec4_sledManagement.Library.Models
+
+@inject SledManagementRepo ManagementRepo
+
+<h3>Add User</h3>
+
+<EditForm Model="CreateUser" FormName="createUserForm" OnInvalidSubmit="ValidUserSubmit">
+    <DataAnnotationsValidator />
+    <div>
+        <label>User Name:</label>
+        <InputText @bind-Value="CreateUser.UserName" />
+        <ValidationMessage For="@(() => CreateUser.UserName)"></ValidationMessage>
+    </div>
+    <div>
+        <label>First Name:</label>
+        <InputText @bind-Value="CreateUser.FirstName" />
+        <ValidationMessage For="@(() => CreateUser.FirstName)"></ValidationMessage>
+    </div>
+    <div>
+        <label>Last Name:</label>
+        <InputText @bind-Value="CreateUser.LastName" />
+        <ValidationMessage For="@(() => CreateUser.LastName)"></ValidationMessage>
+    </div>
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value=CreateUser.Email/>
+        <ValidationMessage For="@(() => CreateUser.Email)"></ValidationMessage>
+    </div>
+
+    <div>
+        <label>Password:</label>
+        <InputText @bind-Value="CreateUser.PasswordHash" />
+        <ValidationMessage For="@(() => CreateUser.PasswordHash)"></ValidationMessage>
+    </div>
+
+    <button type="submit">Register</button>
+
+</EditForm>
+
+@code {
+
+    public User CreateUser { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        CreateUser = new();
+
+        return base.OnInitializedAsync();
+    }
+
+    public void ValidUserSubmit()
+    {
+        var result = ManagementRepo.CreateUser(CreateUser);
+        if (result < 1)
+        {
+            // TODO: not working -> show message
+        }
+    }
+
+}

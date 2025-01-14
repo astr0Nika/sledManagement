@@ -7,7 +7,25 @@
 <h3>Add Sled</h3>
 
 <EditForm Model="CreateSled" FormName="createSledForm" OnValidSubmit="ValidFormSubmited">
-    <InputDate Value="CreateSled.CreateDate">Date of creation: </InputDate>
+    <DataAnnotationsValidator />
+    <div>
+        <label>Date of creation:</label>
+        <InputDate @bind-Value="CreateSled.CreateDate" />
+        <ValidationMessage For="@(() => CreateSled.CreateDate)"></ValidationMessage>
+    </div>
+
+    <div>
+        <label for="sledType">Select sled type:</label>
+        <InputSelect @bind-Value="@CreateSled.Type">
+            @foreach (var type in Enum.GetValues(typeof(SledType)))
+            {
+                <option value="@type">@type</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="() => CreateSled.Type" />
+    </div>
+
+    <button type="submit">Create Sled</button>
 
 </EditForm>
 
@@ -16,7 +34,10 @@
 
     protected override Task OnInitializedAsync()
     {
-        CreateSled = new Sled();
+        CreateSled = new Sled()
+            {
+                CreateDate = DateTime.Now,
+            };
 
         return base.OnInitializedAsync();
     }
@@ -24,9 +45,10 @@
     public void ValidFormSubmited()
     {
         var result = ManagementRepo.CreateSled(CreateSled);
-        if (!result)
+        if (result < 1)
         {
             // TODO: not worked -> show message
         }
+
     }
 }

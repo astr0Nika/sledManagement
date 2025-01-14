@@ -8,7 +8,7 @@ public class Sled
 
     [Required]
     [Range(0, 3)]
-    public int Type { get; set; }
+    public SledType Type { get; set; }
 
     [Required]
     public DateTime CreateDate { get; set; }
