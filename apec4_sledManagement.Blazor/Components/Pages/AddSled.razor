@@ -1,0 +1,32 @@
+﻿@page "/add-sled"
+@using apec4_sledManagement.Library
+@using apec4_sledManagement.Library.Models
+
+@inject SledManagementRepo ManagementRepo
+
+<h3>Add Sled</h3>
+
+<EditForm Model="CreateSled" FormName="createSledForm" OnValidSubmit="ValidFormSubmited">
+    <InputDate Value="CreateSled.CreateDate">Date of creation: </InputDate>
+
+</EditForm>
+
+@code {
+    public Sled CreateSled { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        CreateSled = new Sled();
+
+        return base.OnInitializedAsync();
+    }
+
+    public void ValidFormSubmited()
+    {
+        var result = ManagementRepo.CreateSled(CreateSled);
+        if (!result)
+        {
+            // TODO: not worked -> show message
+        }
+    }
+}
