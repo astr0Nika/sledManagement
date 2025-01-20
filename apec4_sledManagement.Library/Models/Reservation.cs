@@ -23,6 +23,7 @@ public class Reservation
     [Required]
     public DateTime EndDate { get; set; }
 
+    // navigation properties
     [ForeignKey("UserId")]
     public virtual User User { get; set; }
 
