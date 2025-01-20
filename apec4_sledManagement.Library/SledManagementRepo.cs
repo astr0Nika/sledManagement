@@ -1,6 +1,6 @@
 ﻿using apec4_sledManagement.Library.Models;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace apec4_sledManagement.Library;
 
@@ -23,7 +23,7 @@ public class SledManagementRepo
         Guid guid = Guid.NewGuid();
         string password = GetPasswordHash(user.PasswordHash, guid.ToString());
 
-        _dbContext.Users.Add(new User
+        User newUser = new User
         {
             Guid = guid,
             UserName = user.UserName,
@@ -32,21 +32,47 @@ public class SledManagementRepo
             Email = user.Email,
             PasswordHash = password,
             IsAdmin = false
-        });
+        };
 
+        _dbContext.Users.Add(newUser);
         return _dbContext.SaveChanges();
     }
 
     public string GetPasswordHash(string password, string salt)
     {
-        throw new NotImplementedException();
+        HashAlgorithm hashAlg = SHA256.Create();
+        byte[] bytes = hashAlg.ComputeHash(Encoding.UTF8.GetBytes(password + salt));
+
+        StringBuilder stringBuilder = new StringBuilder();
+        foreach (byte b in bytes)
+        {
+            stringBuilder.Append(b.ToString("X2"));
+        }
+
+        return stringBuilder.ToString();
     }
 
-    public bool LoginUser(Guid guid, string password)
+    public bool LoginUser(string username, string password)
     {
-        throw new NotImplementedException();
+        // get user
+        User? user = _dbContext.Users.FirstOrDefault(x => x.UserName == username);
+        if (user == null)
+        {
+            return false;
+        }
+
+        // hash given password
+        var Password = GetPasswordHash(password, user.Guid.ToString());
+
+        // compare with db
+        if (Password == user.PasswordHash)
+        {
+            return true;
+        }
+
+        return false;
     }
-        
+
     public List<Sled> GetSleds()
     {
         return _dbContext.Sleds.ToList();

@@ -2,6 +2,7 @@
 @using apec4_sledManagement.Library
 @using apec4_sledManagement.Library.Models
 
+@rendermode InteractiveServer
 @inject SledManagementRepo ManagementRepo
 
 <h3>Add Sled</h3>
@@ -50,5 +51,9 @@
             // TODO: not worked -> show message
         }
 
+        CreateSled = new Sled()
+            {
+                CreateDate = DateTime.Now,
+            };
     }
 }
