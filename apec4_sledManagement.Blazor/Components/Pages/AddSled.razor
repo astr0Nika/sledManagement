@@ -6,28 +6,28 @@
 @inject SledManagementRepo ManagementRepo
 
 <h3>Add Sled</h3>
+<br />
 
-<EditForm Model="CreateSled" FormName="createSledForm" OnValidSubmit="ValidFormSubmited">
+<EditForm Model="CreateSled" FormName="createSledForm" OnValidSubmit="ValidFormSubmited" style="margin-left:10%; margin-right:10%;">
     <DataAnnotationsValidator />
-    <div>
-        <label>Date of creation:</label>
-        <InputDate @bind-Value="CreateSled.CreateDate" />
-        <ValidationMessage For="@(() => CreateSled.CreateDate)"></ValidationMessage>
+    <div class="form-floating mb-3">
+        <InputDate @bind-Value="CreateSled.CreateDate" class="form-control" autocomplete="createdate" aria-required="true" />
+        <label for="createdate">Date of creation:</label>
+        <ValidationMessage For="@(() => CreateSled.CreateDate)" class="text-danger"></ValidationMessage>
     </div>
 
-    <div>
-        <label for="sledType">Select sled type:</label>
-        <InputSelect @bind-Value="@CreateSled.Type">
+    <div class="form-floating mb-3">
+        <InputSelect @bind-Value="@CreateSled.Type" class="form-control">
             @foreach (var type in Enum.GetValues(typeof(SledType)))
             {
                 <option value="@type">@type</option>
             }
         </InputSelect>
-        <ValidationMessage For="() => CreateSled.Type" />
+        <label for="sledType">Select sled type:</label>
+        <ValidationMessage For="() => CreateSled.Type" class="text-danger"/>
     </div>
 
-    <button type="submit">Create Sled</button>
-
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Create Sled</button>
 </EditForm>
 
 @code {
@@ -49,7 +49,7 @@
         var result = ManagementRepo.CreateSled(CreateSled);
         if (result < 1)
         {
-            // TODO: not worked -> show message
+            // TODO: show message when failed
         }
 
         CreateSled = new Sled()

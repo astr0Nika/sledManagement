@@ -39,3 +39,14 @@
 | Nr. | Datum | Aktion | Eingabe | Kommentar | Test bestanden |
 | ----- | ----- | ----- | ----- | ----- | ----- |
 | 1 | 20.01.2025 15:24 | Sehe alle sleds | - | - | JA |
+
+## Reserviere ein Sled
+
+**Beschreibung:** Reserviere eine Schlitte, wenn es eine gibt bzw. die nicht schon ausgeliehen ist
+
+| Nr. | Datum | Aktion | Eingabe | Kommentar | Test bestanden |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| 2 | 20.01.2025 20:36 | Alles ausgefühlt; Leihe die, die noch nicht ausgeliehen worden sind | Type: OneSeater, Start: 22.01.2025 14:30, End: 22.01.2025 15:00 | - | JA |
+| 1 | 20.01.2025 20:41 | Alles ausgefühlt; Leihe die, die nicht möglich sind | Type: OneSeater, Start: 22.01.2025 14:15, End 22.01.2025 15:30 | Sled wurde nicht ausgeliehen | JA |
+| 3 | 20.01.2025 20:41 | Alles ausgefühlt; Leihe die, die nicht möglich sind | Type: OneSeater, Start: 22.01.2025 14:00, End 22.01.2025 14:45 | Sled wurde nicht ausgeliehen | JA |
+| 3 | 20.01.2025 20:41 | Alles ausgefühlt; Leihe die, die nicht möglich sind | Type: OneSeater, Start: 22.01.2025 14:00, End 22.01.2025 14:45 | Sled wurde nicht ausgeliehen | JA |

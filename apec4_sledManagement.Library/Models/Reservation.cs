@@ -1,21 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace apec4_sledManagement.Library.Models;
 
-[PrimaryKey(nameof(UserId), nameof(SledNumber))]
-public class Reservation 
+public class Reservation
 {
+    [Key]
+    public int ReservationId { get; set; }
+
+    [Required]
     public Guid UserId { get; set; }
 
+    [Required]
     public int SledNumber { get; set; }
 
     [Required]
     public DateTime CreateDate { get; set; }
 
     [Required]
-    public DateTime BeginDate { get; set; }
+    public DateTime StartDate { get; set; }
 
     [Required]
     public DateTime EndDate { get; set; }

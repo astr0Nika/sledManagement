@@ -6,37 +6,38 @@
 @inject SledManagementRepo ManagementRepo
 
 <h3>Login User</h3>
+<br />
 
-<EditForm FormName="loginForm" Model="LoginModel" OnValidSubmit="ValidUserSubmit">
-    <DataAnnotationsValidator/>
-    <div>
-        <label>Username:</label>
-        <InputText @bind-Value="LoginModel.Username"></InputText>
-        <ValidationMessage For="@(() => LoginModel.Username)"></ValidationMessage>
+<EditForm FormName="loginForm" Model="LoginModel" OnValidSubmit="ValidUserSubmit" style="margin-left:10%; margin-right:10%;">
+    <DataAnnotationsValidator />
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="LoginModel.Username" class="form-control" autocomplete="username" aria-required="true"></InputText>
+        <label for="username">Username:</label>
+        <ValidationMessage For="@(() => LoginModel.Username)" class="text-danger"></ValidationMessage>
     </div>
-    <div>
-        <label>Password:</label>
-        <InputText @bind-Value="LoginModel.Password"></InputText>
-        <ValidationMessage For="@(() => LoginModel.Password)"></ValidationMessage>
+    <div class="form-floating mb-3">
+        <InputText type="password" @bind-Value="LoginModel.Password" class="form-control" autocomplete="password" aria-required="true"></InputText>
+        <label for="password">Password:</label>
+        <ValidationMessage For="@(() => LoginModel.Password)" class="text-danger"></ValidationMessage>
     </div>
 
-    <button type="submit">Login</button>
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
 </EditForm>
 
 @code {
     private InputModel LoginModel { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         LoginModel = new();
-        return base.OnInitializedAsync();
     }
 
     public void ValidUserSubmit()
     {
         var result = ManagementRepo.LoginUser(LoginModel.Username, LoginModel.Password);
-        if(!result){
-            // did not work
+        if (!result)
+        {
+            // TODO: show message when failed
         }
 
         // TODO: if admin, navigate to list of sleds

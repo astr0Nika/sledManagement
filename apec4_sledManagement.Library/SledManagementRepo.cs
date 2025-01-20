@@ -1,4 +1,6 @@
-﻿using apec4_sledManagement.Library.Models;
+﻿using apec4_sledManagement.Library.InputModels;
+using apec4_sledManagement.Library.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -14,19 +16,19 @@ public class SledManagementRepo
     }
 
     /// <summary>
-    /// Plain password in user will be hashed
+    /// 
     /// </summary>
     /// <param name="user"></param>
     /// <returns>The number of changed entries in database</returns>
-    public int CreateUser(User user)
+    public int CreateUser(UserInputModel user)
     {
         Guid guid = Guid.NewGuid();
-        string password = GetPasswordHash(user.PasswordHash, guid.ToString());
+        string password = GetPasswordHash(user.Password, guid.ToString());
 
         User newUser = new User
         {
-            Guid = guid,
-            UserName = user.UserName,
+            UserId = guid,
+            Username = user.Username,
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
@@ -54,13 +56,13 @@ public class SledManagementRepo
 
     public bool LoginUser(string username, string password)
     {
-        User? user = _dbContext.Users.FirstOrDefault(x => x.UserName == username);
+        User? user = _dbContext.Users.FirstOrDefault(x => x.Username == username);
         if (user == null)
         {
             return false;
         }
 
-        var pwd = GetPasswordHash(password, user.Guid.ToString());
+        var pwd = GetPasswordHash(password, user.UserId.ToString());
         if (pwd == user.PasswordHash)
         {
             return true;
@@ -69,9 +71,9 @@ public class SledManagementRepo
         return false;
     }
 
-    public List<Sled> GetSleds()
+    public Task<List<Sled>> GetSledsAsync()
     {
-        return _dbContext.Sleds.ToList();
+        return _dbContext.Sleds.ToListAsync();
     }
 
     /// <summary>
@@ -85,8 +87,49 @@ public class SledManagementRepo
         return _dbContext.SaveChanges();
     }
 
-    public bool ReserveSled(DateTime startDate, DateTime endDate, SledType sledType)
+    public bool ReserveSled(ReserveSledInputModel reservaton)
     {
-        throw new NotImplementedException();
+        var filterdSled = _dbContext.Sleds.FirstOrDefault(x => x.Type == reservaton.Type);
+        if (filterdSled == null)
+        {
+            return false;
+        }
+
+        var canReserve = CanReservationBeMade(filterdSled.SledNumber, reservaton.StartDate, reservaton.EndDate);
+        if (!canReserve)
+        {
+            return false;
+        }
+
+        var newReservation = new Reservation()
+        {
+            CreateDate = DateTime.Now,
+            StartDate = reservaton.StartDate,
+            EndDate = reservaton.EndDate,
+            SledNumber = filterdSled.SledNumber,
+            UserId = new Guid("0e39d385-a139-45ed-97fb-e34134dab494")
+        };
+
+        _dbContext.Reservations.Add(newReservation);
+        _dbContext.SaveChanges();
+
+        return true;
+    }
+
+    public bool CanReservationBeMade(int sledNr, DateTime newBeginDate, DateTime newEndDate)
+    {
+        // Filter reservations for the same sled
+        var sledReservations = _dbContext.Reservations.Where(r => r.SledNumber == sledNr);
+
+        // Check for overlap
+        foreach (var reservation in sledReservations)
+        {
+            if (newBeginDate < reservation.EndDate && newEndDate > reservation.StartDate)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

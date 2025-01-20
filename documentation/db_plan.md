@@ -27,8 +27,9 @@ Code first with Entity Framework
 
 | Column | Type | Constraints |
 | ----- | ----- | ----- |
-| guid | nvarchar(255) | FK, PK |
-| sledNr | int | FK, PK |
+| ReservationId | int | PK |
+| UserId | nvarchar(255) | FK, NOT NULL |
+| sledNr | int | FK, NOT NULL |
 | createDate | datetime | NOT NULL |
 | beginDate | datetime | NOT NULL |
 | endDate | datetime | NOT NULL |

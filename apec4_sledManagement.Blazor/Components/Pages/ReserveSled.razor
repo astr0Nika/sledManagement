@@ -1,5 +1,6 @@
 ﻿@page "/reserve-sled";
 @using apec4_sledManagement.Library
+@using apec4_sledManagement.Library.InputModels
 @using apec4_sledManagement.Library.Models
 
 @rendermode InteractiveServer
@@ -7,53 +8,52 @@
 
 <h3>Reserve Sled</h3>
 
-<EditForm FormName="reserveSledForm" Model="ReserveModel" OnValidSubmit="ValidFormSubmited">
+<EditForm FormName="reserveSledForm" Model="ReserveModel" OnValidSubmit="ValidFormSubmited" style="margin-left:10%; margin-right:10%">
     <DataAnnotationsValidator />
 
-    <div>
-        <label for="sledType">Select sled type:</label>
-        <InputSelect @bind-Value="ReserveModel.Type">
+    <div class="form-floating mb-3">
+        <InputSelect @bind-Value="@ReserveModel.Type" class="form-control">
             @foreach (var type in Enum.GetValues(typeof(SledType)))
             {
                 <option value="@type">@type</option>
             }
         </InputSelect>
-        <ValidationMessage For="() => ReserveModel.Type" />
+        <label for="sledType">Select sled type:</label>
+        <ValidationMessage For="() => ReserveModel.Type" class="text-danger" />
     </div>
-    <div>
-        <label>From when:</label>
-        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="ReserveModel.StartDate" />
-        <ValidationMessage For="@(() => ReserveModel.StartDate)"></ValidationMessage>
+    <div class="form-floating mb-3">
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="ReserveModel.StartDate" class="form-control" autocomplete="startdate" aria-required="true" />
+        <label for="startdate">From when:</label>
+        <ValidationMessage For="@(() => ReserveModel.StartDate)" class="text-danger"></ValidationMessage>
     </div>
-    <div>
-        <label>Till when:</label>
-        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="ReserveModel.EndDate" />
-        <ValidationMessage For="@(() => ReserveModel.EndDate)"></ValidationMessage>
+    <div class="form-floating mb-3">
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="ReserveModel.EndDate" class="form-control" autocomplete="enddate" aria-required="true" />
+        <label for="enddate">Till when:</label>
+        <ValidationMessage For="@(() => ReserveModel.EndDate)" class="text-danger"></ValidationMessage>
     </div>
 
-    <button type="submit">Create Sled</button>
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Reserve</button>
 </EditForm>
 
 @code {
 
-    private InputModel ReserveModel { get; set; }
+    private ReserveSledInputModel ReserveModel { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         ReserveModel = new()
             {
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddDays(1)
             };
-
-        return base.OnInitializedAsync();
     }
 
     public void ValidFormSubmited()
     {
-        var result = ManagementRepo.ReserveSled(ReserveModel.StartDate, ReserveModel.EndDate, ReserveModel.Type);
-        if(!result){
-            // did not work
+        var result = ManagementRepo.ReserveSled(ReserveModel);
+        if (!result)
+        {
+            // TODO: show message when failed
         }
 
         ReserveModel = new()
@@ -61,12 +61,5 @@
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddDays(1)
             };
-    }
-
-    sealed class InputModel
-    {
-        public SledType Type { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
     }
 }

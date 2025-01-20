@@ -1,50 +1,48 @@
 ﻿@page "/add-user"
 @using apec4_sledManagement.Library
-@using apec4_sledManagement.Library.Models
+@using apec4_sledManagement.Library.InputModels
 
 @rendermode InteractiveServer
 @inject SledManagementRepo ManagementRepo
 
 <h3>Add User</h3>
+<br />
 
-<EditForm Model="CreateUser" FormName="createUserForm" OnValidSubmit="ValidUserSubmit">
+<EditForm Model="CreateUser" FormName="createUserForm" OnValidSubmit="ValidUserSubmit" style="margin-left:10%; margin-right:10%">
     <DataAnnotationsValidator />
-    <div>
-        <label>User Name:</label>
-        <InputText @bind-Value="CreateUser.UserName" />
-        <ValidationMessage For="@(() => CreateUser.UserName)"></ValidationMessage>
+
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="CreateUser.Username" class="form-control" autocomplete="username" aria-required="true" />
+        <label for="username">Username:</label>
+        <ValidationMessage For="@(() => CreateUser.Username)" class="text-danger"></ValidationMessage>
     </div>
-    <div>
-        <label>First Name:</label>
-        <InputText @bind-Value="CreateUser.FirstName" />
-        <ValidationMessage For="@(() => CreateUser.FirstName)"></ValidationMessage>
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="CreateUser.FirstName" class="form-control" autocomplete="firstname" aria-required="true"/>
+        <label for="firstname">First name:</label>
+        <ValidationMessage For="@(() => CreateUser.FirstName)" class="text-danger"></ValidationMessage>
     </div>
-    <div>
-        <label>Last Name:</label>
-        <InputText @bind-Value="CreateUser.LastName" />
-        <ValidationMessage For="@(() => CreateUser.LastName)"></ValidationMessage>
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="CreateUser.LastName" class="form-control" autocomplete="lastname" aria-required="true"/>
+        <label for="lastname">Last name:</label>
+        <ValidationMessage For="@(() => CreateUser.LastName)" class="text-danger"></ValidationMessage>
     </div>
-    @* TODO: validate email *@
-    <div>
-        <label>Email:</label>
-        <InputText @bind-Value=CreateUser.Email/>
-        <ValidationMessage For="@(() => CreateUser.Email)"></ValidationMessage>
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="CreateUser.Email" class="form-control" autocomplete="email" aria-required="true"/>
+        <label for="email">Email:</label>
+        <ValidationMessage For="@(() => CreateUser.Email)" class="text-danger"></ValidationMessage>
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password" @bind-Value="CreateUser.Password" class="form-control" autocomplete="password" aria-required="true" />
+        <label for="password">Password:</label>
+        <ValidationMessage For="@(() => CreateUser.Password)" class="text-danger"></ValidationMessage>
     </div>
 
-    @* TODO: validate password *@
-    <div>
-        <label>Password:</label>
-        <InputText @bind-Value="CreateUser.PasswordHash" />
-        <ValidationMessage For="@(() => CreateUser.PasswordHash)"></ValidationMessage>
-    </div>
-
-    <button type="submit">Register</button>
-
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
 </EditForm>
 
 @code {
 
-    public User CreateUser { get; set; }
+    public UserInputModel CreateUser { get; set; }
 
     protected override Task OnInitializedAsync()
     {
@@ -57,7 +55,7 @@
         var result = ManagementRepo.CreateUser(CreateUser);
         if (result < 1)
         {
-            // TODO: not working -> show message
+            // TODO: show message when failed
         }
 
         CreateUser = new();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using apec4_sledManagement.Library;
 
@@ -11,9 +12,11 @@ using apec4_sledManagement.Library;
 namespace apec4_sledManagement.Library.Migrations
 {
     [DbContext(typeof(SledDbContext))]
-    partial class SledDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250120173032_PropertyNameChanges")]
+    partial class PropertyNameChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +27,11 @@ namespace apec4_sledManagement.Library.Migrations
 
             modelBuilder.Entity("apec4_sledManagement.Library.Models.Reservation", b =>
                 {
-                    b.Property<int>("ReservationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
+                    b.Property<int>("SledNumber")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -36,20 +39,12 @@ namespace apec4_sledManagement.Library.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SledNumber")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ReservationId");
+                    b.HasKey("UserId", "SledNumber");
 
                     b.HasIndex("SledNumber");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Reservations");
                 });
@@ -75,7 +70,7 @@ namespace apec4_sledManagement.Library.Migrations
 
             modelBuilder.Entity("apec4_sledManagement.Library.Models.User", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -107,7 +102,7 @@ namespace apec4_sledManagement.Library.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Guid");
 
                     b.ToTable("Users");
                 });

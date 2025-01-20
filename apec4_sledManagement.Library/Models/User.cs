@@ -4,7 +4,7 @@ namespace apec4_sledManagement.Library.Models;
 public class User
 {
     [Key]
-    public Guid Guid { get; set; }
+    public Guid UserId { get; set; }
 
     [Required]
     [StringLength(100)]
@@ -17,7 +17,7 @@ public class User
 
     [Required]
     [StringLength(50)]
-    public string UserName { get; set; }
+    public string Username { get; set; }
 
     [Required]
     public bool IsAdmin { get; set; }

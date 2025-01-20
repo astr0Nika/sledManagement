@@ -4,38 +4,52 @@
 @using apec4_sledManagement.Library.Models
 
 @rendermode InteractiveServer
+@attribute [StreamRendering]
 @inject SledManagementRepo ManagementRepo;
 
 <h3>List Sled</h3>
+<br />
 
-<table>
-    <thead>
-        <tr>
-            <td><b>Nr</b></td>
-            <td><b>Type</b></td>
-            <td><b>Created date</b></td>
-            <td><b>Reserved</b></td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var s in Sleds){
+@if (Sleds == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@s.SledNumber</td>
-                <td>@s.Type</td>
-                <td>@s.CreateDate</td>
-                <td>STATIC NO</td>
+                <td><b>Nr</b></td>
+                <td><b>Type</b></td>
+                <td><b>Created date</b></td>
+                <td><b>Reserved</b></td>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var s in Sleds)
+            {
+                <tr>
+                    <td>@s.SledNumber</td>
+                    <td>@s.Type</td>
+                    <td>@s.CreateDate</td>
+                    @* TODO: when is it reserved *@
+                    <td>STATIC NO</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
-    // TODO: can only be seen by admin
-    public List<Sled> Sleds { get; set; }
+    // TODO: page can only be seen by admin
 
-    protected override Task OnInitializedAsync()
+    public List<Sled>? Sleds { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        Sleds = ManagementRepo.GetSleds();
-        return base.OnInitializedAsync();
+        // Simulate asynchronous loading to demonstrate streaming rendering
+        await Task.Delay(500);
+
+        Sleds = await ManagementRepo.GetSledsAsync();
     }
 }
