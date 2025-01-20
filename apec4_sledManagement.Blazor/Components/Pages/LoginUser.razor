@@ -10,6 +10,7 @@
 
 <EditForm FormName="loginForm" Model="LoginModel" OnValidSubmit="ValidUserSubmit" style="margin-left:10%; margin-right:10%;">
     <DataAnnotationsValidator />
+
     <div class="form-floating mb-3">
         <InputText @bind-Value="LoginModel.Username" class="form-control" autocomplete="username" aria-required="true"></InputText>
         <label for="username">Username:</label>
@@ -44,7 +45,8 @@
         // TODO: if user, navigate to reservation of sled
     }
 
-    sealed class InputModel
+    // used for edit form
+    private sealed class InputModel
     {
         public string Username { get; set; }
         public string Password { get; set; }

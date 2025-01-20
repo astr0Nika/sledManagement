@@ -7,10 +7,12 @@
 @inject SledManagementRepo ManagementRepo;
 
 <h3>Reserve Sled</h3>
+<br />
 
 <EditForm FormName="reserveSledForm" Model="ReserveModel" OnValidSubmit="ValidFormSubmited" style="margin-left:10%; margin-right:10%">
     <DataAnnotationsValidator />
 
+    @* dropdown box *@
     <div class="form-floating mb-3">
         <InputSelect @bind-Value="@ReserveModel.Type" class="form-control">
             @foreach (var type in Enum.GetValues(typeof(SledType)))
@@ -21,6 +23,7 @@
         <label for="sledType">Select sled type:</label>
         <ValidationMessage For="() => ReserveModel.Type" class="text-danger" />
     </div>
+
     <div class="form-floating mb-3">
         <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="ReserveModel.StartDate" class="form-control" autocomplete="startdate" aria-required="true" />
         <label for="startdate">From when:</label>

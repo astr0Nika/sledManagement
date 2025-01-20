@@ -10,12 +10,14 @@
 
 <EditForm Model="CreateSled" FormName="createSledForm" OnValidSubmit="ValidFormSubmited" style="margin-left:10%; margin-right:10%;">
     <DataAnnotationsValidator />
+
     <div class="form-floating mb-3">
         <InputDate @bind-Value="CreateSled.CreateDate" class="form-control" autocomplete="createdate" aria-required="true" />
         <label for="createdate">Date of creation:</label>
         <ValidationMessage For="@(() => CreateSled.CreateDate)" class="text-danger"></ValidationMessage>
     </div>
 
+    @* dropdown box *@
     <div class="form-floating mb-3">
         <InputSelect @bind-Value="@CreateSled.Type" class="form-control">
             @foreach (var type in Enum.GetValues(typeof(SledType)))

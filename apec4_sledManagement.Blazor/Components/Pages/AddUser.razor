@@ -44,10 +44,9 @@
 
     public UserInputModel CreateUser { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         CreateUser = new();
-        return base.OnInitializedAsync();
     }
 
     public void ValidUserSubmit()
