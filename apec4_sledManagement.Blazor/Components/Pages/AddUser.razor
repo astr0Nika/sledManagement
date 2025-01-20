@@ -24,12 +24,14 @@
         <InputText @bind-Value="CreateUser.LastName" />
         <ValidationMessage For="@(() => CreateUser.LastName)"></ValidationMessage>
     </div>
+    @* TODO: validate email *@
     <div>
         <label>Email:</label>
         <InputText @bind-Value=CreateUser.Email/>
         <ValidationMessage For="@(() => CreateUser.Email)"></ValidationMessage>
     </div>
 
+    @* TODO: validate password *@
     <div>
         <label>Password:</label>
         <InputText @bind-Value="CreateUser.PasswordHash" />

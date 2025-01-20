@@ -1,0 +1,72 @@
+﻿@page "/reserve-sled";
+@using apec4_sledManagement.Library
+@using apec4_sledManagement.Library.Models
+
+@rendermode InteractiveServer
+@inject SledManagementRepo ManagementRepo;
+
+<h3>Reserve Sled</h3>
+
+<EditForm FormName="reserveSledForm" Model="ReserveModel" OnValidSubmit="ValidFormSubmited">
+    <DataAnnotationsValidator />
+
+    <div>
+        <label for="sledType">Select sled type:</label>
+        <InputSelect @bind-Value="ReserveModel.Type">
+            @foreach (var type in Enum.GetValues(typeof(SledType)))
+            {
+                <option value="@type">@type</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="() => ReserveModel.Type" />
+    </div>
+    <div>
+        <label>From when:</label>
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="ReserveModel.StartDate" />
+        <ValidationMessage For="@(() => ReserveModel.StartDate)"></ValidationMessage>
+    </div>
+    <div>
+        <label>Till when:</label>
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="ReserveModel.EndDate" />
+        <ValidationMessage For="@(() => ReserveModel.EndDate)"></ValidationMessage>
+    </div>
+
+    <button type="submit">Create Sled</button>
+</EditForm>
+
+@code {
+
+    private InputModel ReserveModel { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        ReserveModel = new()
+            {
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(1)
+            };
+
+        return base.OnInitializedAsync();
+    }
+
+    public void ValidFormSubmited()
+    {
+        var result = ManagementRepo.ReserveSled(ReserveModel.StartDate, ReserveModel.EndDate, ReserveModel.Type);
+        if(!result){
+            // did not work
+        }
+
+        ReserveModel = new()
+            {
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(1)
+            };
+    }
+
+    sealed class InputModel
+    {
+        public SledType Type { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+}

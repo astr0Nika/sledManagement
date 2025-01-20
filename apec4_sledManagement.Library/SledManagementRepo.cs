@@ -54,18 +54,14 @@ public class SledManagementRepo
 
     public bool LoginUser(string username, string password)
     {
-        // get user
         User? user = _dbContext.Users.FirstOrDefault(x => x.UserName == username);
         if (user == null)
         {
             return false;
         }
 
-        // hash given password
-        var Password = GetPasswordHash(password, user.Guid.ToString());
-
-        // compare with db
-        if (Password == user.PasswordHash)
+        var pwd = GetPasswordHash(password, user.Guid.ToString());
+        if (pwd == user.PasswordHash)
         {
             return true;
         }
@@ -89,7 +85,7 @@ public class SledManagementRepo
         return _dbContext.SaveChanges();
     }
 
-    public bool ReserveSled(Reservation reservation)
+    public bool ReserveSled(DateTime startDate, DateTime endDate, SledType sledType)
     {
         throw new NotImplementedException();
     }
