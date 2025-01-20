@@ -1,0 +1,41 @@
+﻿@page "/list-sled";
+
+@using apec4_sledManagement.Library
+@using apec4_sledManagement.Library.Models
+
+@rendermode InteractiveServer
+@inject SledManagementRepo ManagementRepo;
+
+<h3>List Sled</h3>
+
+<table>
+    <thead>
+        <tr>
+            <td><b>Nr</b></td>
+            <td><b>Type</b></td>
+            <td><b>Created date</b></td>
+            <td><b>Reserved</b></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Sleds){
+            <tr>
+                <td>@s.SledNumber</td>
+                <td>@s.Type</td>
+                <td>@s.CreateDate</td>
+                <td>STATIC NO</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    // TODO: can only be seen by admin
+    public List<Sled> Sleds { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Sleds = ManagementRepo.GetSleds();
+        return base.OnInitializedAsync();
+    }
+}
