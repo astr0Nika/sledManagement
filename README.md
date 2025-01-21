@@ -1,28 +1,28 @@
 # Sled Manager
 
-## Current Status
-
-Works: 
-- creating user
-- creating sled
-- reserving a sled
-- login page, but logged user is not saved
-
-In Progress:
-- when task failed, show message
-- sucessfull login
-- check for authorised users 
-
-Documentation:
-- tables for database 
-- tests for any entry in the database
-- user documentation which has not yet been started
-
-## Run Program
+## Run Programm
 
 - clone git reposetory
 - change database connection in file `SledDbContext.cs` - path: `./apec4_sledManagement/apec4_sledManagement.Library/`
-- now build/run
+- now start the programm in your editor (Preferably in Visual Studio)
+
+## Current Status
+
+**Works:**
+- creating user
+- login user, but doesnt do anything besides redirects
+- creating sled
+- reserving a sled
+
+**In Progress:**
+- show success messages
+- remembers user after login
+- check for authorised users 
+
+**Documentation:**
+- database -  structure of tables
+- testing - tests for any entry in the database
+- user - reservation documentation in Microsoft Word File
 
 ## Exercise in german
 
