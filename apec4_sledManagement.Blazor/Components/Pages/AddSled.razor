@@ -30,23 +30,27 @@
         <ValidationMessage For="() => CreateSled.Type" class="text-danger"/>
     </div>
 
-    @if (!Result.Successful)
+    @if (Result.Successful.HasValue && !Result.Successful.Value) // failed
     {
         <div class="alert alert-danger">@Result.Message</div>
+    }
+    @if (Result.Successful.HasValue && Result.Successful.Value) // succeded
+    {
+        <div class="alert alert-info">@Result.Message</div>
     }
 
     <button type="submit" class="w-100 btn btn-lg btn-primary">Create Sled</button>
 </EditForm>
 
 @code {
-    // TODO: only admin can see this page
+    // TODO: only admin can see AddSled page
 
     private RepoResult Result { get; set; }
     private Sled CreateSled { get; set; }
 
     protected override void OnInitialized()
     {
-        Result = new() { Successful = true };
+        Result = new();
         CreateSled = new Sled()
         {
             CreateDate = DateTime.Now,
@@ -56,12 +60,11 @@
     public void ValidFormSubmited()
     {
         Result = ManagementRepo.CreateSled(CreateSled);
-        if (!Result.Successful)
+        if (!Result.Successful.HasValue || !Result.Successful.Value) // no value or no success
         {
             return;
         }
 
-        // TODO: add message of success
         CreateSled = new Sled()
         {
             CreateDate = DateTime.Now,

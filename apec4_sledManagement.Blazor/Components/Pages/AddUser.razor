@@ -37,9 +37,13 @@
         <ValidationMessage For="@(() => CreateUser.Password)" class="text-danger"></ValidationMessage>
     </div>
 
-    @if (!Result.Successful)
+    @if (Result.Successful.HasValue && !Result.Successful.Value) // failed
     {
         <div class="alert alert-danger">@Result.Message</div>
+    }
+    @if (Result.Successful.HasValue && Result.Successful.Value) // succeded
+    {
+        <div class="alert alert-info">@Result.Message</div>
     }
 
     <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
@@ -51,7 +55,7 @@
 
     protected override void OnInitialized()
     {
-        Result = new() { Successful = true };
+        Result = new();
         CreateUser = new();
     }
 
@@ -74,12 +78,10 @@
         // TODO: validate password -> min. 5 characters; numbers and letters
 
         Result = ManagementRepo.CreateUser(CreateUser);
-        if (!Result.Successful)
+        if (!Result.Successful.HasValue || !Result.Successful.Value) // no value or no success
         {
             return;
         }
-
-        // TODO: add message of success
 
         CreateUser = new();
     }

@@ -35,9 +35,13 @@
         <ValidationMessage For="@(() => ReserveModel.EndDate)" class="text-danger"></ValidationMessage>
     </div>
 
-    @if (!Result.Successful)
+    @if (Result.Successful.HasValue && !Result.Successful.Value) // failed
     {
         <div class="alert alert-danger">@Result.Message</div>
+    }
+    @if (Result.Successful.HasValue && Result.Successful.Value) // succeded
+    {
+        <div class="alert alert-info">@Result.Message</div>
     }
 
     <button type="submit" class="w-100 btn btn-lg btn-primary">Reserve</button>
@@ -49,7 +53,7 @@
 
     protected override void OnInitialized()
     {
-        Result = new() { Successful = true };
+        Result = new();
         ReserveModel = new()
         {
             StartDate = DateTime.Now,
@@ -60,7 +64,7 @@
     public void ValidFormSubmited()
     {
         Result = ManagementRepo.CreateReservationOfSled(ReserveModel);
-        if (!Result.Successful)
+        if (!Result.Successful.HasValue || !Result.Successful.Value) // no value or no success
         {
             return;
         }

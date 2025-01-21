@@ -19,7 +19,7 @@ public partial class SledManagementRepo
     /// Create an entry of user and hash the given password
     /// </summary>
     /// <param name="user"></param>
-    /// <returns>Sucess: bool and Message if failed</returns>
+    /// <returns>Sucess: bool, Message: string</returns>
     public RepoResult CreateUser(UserInputModel user)
     {
         try
@@ -50,7 +50,11 @@ public partial class SledManagementRepo
             };
         }
 
-        return new RepoResult() { Successful = true };
+        return new RepoResult()
+        {
+            Successful = true,
+            Message = "New User was created."
+        };
     }
 
     private string GetPasswordHash(string password, string salt)
@@ -72,7 +76,7 @@ public partial class SledManagementRepo
     /// </summary>
     /// <param name="username"></param>
     /// <param name="password"></param>
-    /// <returns> Success: bool and Message if failed</returns>
+    /// <returns>Success: bool, Message: string</returns>
     public RepoResult CanUserLogin(string username, string password)
     {
         // get user by username
@@ -85,10 +89,11 @@ public partial class SledManagementRepo
             {
                 return new RepoResult()
                 {
-                    Successful = true
+                    Successful = true,
+                    Message = "Password is correct."
                 };
             }
-        }        
+        }
 
         return new RepoResult()
         {
@@ -106,7 +111,7 @@ public partial class SledManagementRepo
     /// Create an entry of sled
     /// </summary>
     /// <param name="sled"></param>
-    /// <returns>Success: bool and Message if failed</returns>
+    /// <returns>Success: bool, Message: string</returns>
     public RepoResult CreateSled(Sled sled)
     {
         try
@@ -127,7 +132,8 @@ public partial class SledManagementRepo
 
         return new RepoResult()
         {
-            Successful = true
+            Successful = true,
+            Message = "New sled was created."
         };
     }
 
@@ -135,7 +141,7 @@ public partial class SledManagementRepo
     /// Create an entry of reservation
     /// </summary>
     /// <param name="reservaton"></param>
-    /// <returns>Success: bool and Message if failed</returns>
+    /// <returns>Success: bool, Message: string</returns>
     public RepoResult CreateReservationOfSled(ReserveSledInputModel reservaton)
     {
         // get sled by type
@@ -188,6 +194,7 @@ public partial class SledManagementRepo
         return new RepoResult()
         {
             Successful = true,
+            Message = "Reservation was succesfully made."
         };
     }
 

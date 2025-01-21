@@ -9,9 +9,14 @@ Works:
 - login page, but logged user is not saved
 
 In Progress:
-- when task failed, show message
 - sucessfull login
 - check for authorised users 
+- admin list of reservations
+    - list exists
+    - reservations are not shows
+
+
+> Try this [page](https://blazorhelpwebsite.com/ViewBlogPost/36) for login and authorization
 
 Documentation:
 - tables for database 
