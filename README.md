@@ -1,12 +1,18 @@
 # Sled Manager
 
+## Run Programm
+
+- clone git reposetory
+- change database connection in file `SledDbContext.cs` - path: `./apec4_sledManagement/apec4_sledManagement.Library/`
+- now start the programm in your editor (Preferably in Visual Studio)
+
 ## Current Status
 
-Works: 
+**Works:**
 - creating user
+- login user, but doesnt do anything besides redirects
 - creating sled
 - reserving a sled
-- login page, but logged user is not saved
 
 In Progress:
 - sucessfull login
@@ -18,16 +24,10 @@ In Progress:
 
 > Try this [page](https://blazorhelpwebsite.com/ViewBlogPost/36) for login and authorization
 
-Documentation:
-- tables for database 
-- tests for any entry in the database
-- user documentation which has not yet been started
-
-## Run Program
-
-- clone git reposetory
-- change database connection in file `SledDbContext.cs` - path: `./apec4_sledManagement/apec4_sledManagement.Library/`
-- now build/run
+**Documentation:**
+- database -  structure of tables
+- testing - tests for any entry in the database
+- user - reservation documentation in Microsoft Word File
 
 ## Exercise in german
 
