@@ -1,6 +1,6 @@
 ﻿using apec4_sledManagement.Library.Models;
 
-namespace apec4_sledManagement.Library.InputModels;
+namespace apec4_sledManagement.Library.TransferOfDataModels;
 public class ReserveSledInputModel
 {
     public SledType Type { get; set; }

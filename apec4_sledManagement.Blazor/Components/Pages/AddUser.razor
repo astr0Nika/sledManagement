@@ -1,6 +1,6 @@
 ﻿@page "/add-user"
 @using apec4_sledManagement.Library
-@using apec4_sledManagement.Library.InputModels
+@using apec4_sledManagement.Library.TransferOfDataModels
 
 @rendermode InteractiveServer
 @inject SledManagementRepo ManagementRepo
@@ -37,23 +37,21 @@
         <ValidationMessage For="@(() => CreateUser.Password)" class="text-danger"></ValidationMessage>
     </div>
 
-    @if (!Successful)
+    @if (!Result.Successful)
     {
-        <div class="alert alert-danger">@Message</div>
+        <div class="alert alert-danger">@Result.Message</div>
     }
 
     <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
 </EditForm>
 
 @code {
+    private RepoResult Result { get; set; }
     private UserInputModel CreateUser { get; set; }
-    private bool Successful { get; set; }
-    private string Message { get; set; }
 
     protected override void OnInitialized()
     {
-        Successful = true;
-        Message = "";
+        Result = new() { Successful = true };
         CreateUser = new();
     }
 
@@ -65,18 +63,23 @@
             || string.IsNullOrWhiteSpace(CreateUser.Email)
             || string.IsNullOrWhiteSpace(CreateUser.Password))
         {
-            Successful = false;
-            Message = "Error: A field was not filled.";
+            Result = new()
+                {
+                    Successful = false,
+                    Message = "Error: A field was not filled."
+                };
             return;
         }
 
-        var result = ManagementRepo.CreateUser(CreateUser);
-        if (result < 1)
+        // TODO: validate password -> min. 5 characters; numbers and letters
+
+        Result = ManagementRepo.CreateUser(CreateUser);
+        if (!Result.Successful)
         {
-            Successful = false;
-            Message = "Error: User could not be created.";
             return;
         }
+
+        // TODO: add message of success
 
         CreateUser = new();
     }

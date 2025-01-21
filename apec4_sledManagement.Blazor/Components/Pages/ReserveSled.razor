@@ -1,7 +1,7 @@
 ﻿@page "/reserve-sled";
 @using apec4_sledManagement.Library
-@using apec4_sledManagement.Library.InputModels
 @using apec4_sledManagement.Library.Models
+@using apec4_sledManagement.Library.TransferOfDataModels
 
 @rendermode InteractiveServer
 @inject SledManagementRepo ManagementRepo;
@@ -35,9 +35,9 @@
         <ValidationMessage For="@(() => ReserveModel.EndDate)" class="text-danger"></ValidationMessage>
     </div>
 
-    @if (!Successful)
+    @if (!Result.Successful)
     {
-        <div class="alert alert-danger">@Message</div>
+        <div class="alert alert-danger">@Result.Message</div>
     }
 
     <button type="submit" class="w-100 btn btn-lg btn-primary">Reserve</button>
@@ -45,34 +45,30 @@
 
 @code {
     private ReserveSledInputModel ReserveModel { get; set; }
-    private bool Successful { get; set; }
-    private string Message { get; set; }
+    private RepoResult Result { get; set; }
 
     protected override void OnInitialized()
     {
-        Successful = true;
-        Message = "";
+        Result = new() { Successful = true };
         ReserveModel = new()
-            {
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(1)
-            };
+        {
+            StartDate = DateTime.Now,
+            EndDate = DateTime.Now.AddDays(1)
+        };
     }
 
     public void ValidFormSubmited()
     {
-        var result = ManagementRepo.ReserveSled(ReserveModel);
-        if (!result)
+        Result = ManagementRepo.CreateReservationOfSled(ReserveModel);
+        if (!Result.Successful)
         {
-            Successful = false;
-            Message = "Error: Reservation was not successfull.";
             return;
         }
 
         ReserveModel = new()
-            {
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(1)
-            };
+        {
+            StartDate = DateTime.Now,
+            EndDate = DateTime.Now.AddDays(1)
+        };
     }
 }

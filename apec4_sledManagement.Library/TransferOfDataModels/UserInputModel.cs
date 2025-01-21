@@ -1,4 +1,5 @@
-﻿namespace apec4_sledManagement.Library.InputModels;
+﻿namespace apec4_sledManagement.Library.TransferOfDataModels; 
+
 public class UserInputModel
 {
     public string FirstName { get; set; }

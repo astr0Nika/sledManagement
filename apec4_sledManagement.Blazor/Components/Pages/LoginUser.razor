@@ -1,9 +1,11 @@
 ﻿@page "/login-user"
 @using apec4_sledManagement.Library
 @using apec4_sledManagement.Library.Models
+@using apec4_sledManagement.Library.TransferOfDataModels
 
 @rendermode InteractiveServer
 @inject SledManagementRepo ManagementRepo
+@inject NavigationManager NavigationManager
 
 <h3>Login User</h3>
 <br />
@@ -22,9 +24,9 @@
         <ValidationMessage For="@(() => LoginModel.Password)" class="text-danger"></ValidationMessage>
     </div>
 
-    @if (!Successful)
+    @if (!Result.Successful)
     {
-        <div class="alert alert-danger">@Message</div>
+        <div class="alert alert-danger">@Result.Message</div>
     }
 
     <button type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
@@ -32,25 +34,25 @@
 
 @code {
     private InputModel LoginModel { get; set; }
-    private bool Successful { get; set; }
-    private string Message { get; set; }
+    private RepoResult Result { get; set; }
 
     protected override void OnInitialized()
     {
-        Successful = true;
-        Message = "";
+        Result = new() { Successful = true };
         LoginModel = new();
     }
 
     public void ValidUserSubmit()
     {
-        var result = ManagementRepo.LoginUser(LoginModel.Username, LoginModel.Password);
-        if (!result)
+        Result = ManagementRepo.CanUserLogin(LoginModel.Username, LoginModel.Password);
+        if (!Result.Successful)
         {
-            Successful = false;
-            Message = "Error: Login not successfull.";
+            LoginModel = new();
             return;
         }
+
+        // when login works navigate to home
+        NavigationManager.NavigateTo("/", false);
 
         // TODO: if admin, navigate to list of sleds
         // TODO: if user, navigate to reservation of sled

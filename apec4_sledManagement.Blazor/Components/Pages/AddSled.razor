@@ -1,6 +1,7 @@
 ﻿@page "/add-sled"
 @using apec4_sledManagement.Library
 @using apec4_sledManagement.Library.Models
+@using apec4_sledManagement.Library.TransferOfDataModels
 
 @rendermode InteractiveServer
 @inject SledManagementRepo ManagementRepo
@@ -29,9 +30,9 @@
         <ValidationMessage For="() => CreateSled.Type" class="text-danger"/>
     </div>
 
-    @if (!Successful)
+    @if (!Result.Successful)
     {
-        <div class="alert alert-danger">@Message</div>
+        <div class="alert alert-danger">@Result.Message</div>
     }
 
     <button type="submit" class="w-100 btn btn-lg btn-primary">Create Sled</button>
@@ -40,36 +41,30 @@
 @code {
     // TODO: only admin can see this page
 
+    private RepoResult Result { get; set; }
     private Sled CreateSled { get; set; }
-    private bool Successful { get; set; }
-    private string Message { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        Successful = true;
-        Message = "";
-
+        Result = new() { Successful = true };
         CreateSled = new Sled()
-            {
-                CreateDate = DateTime.Now,
-            };
-
-        return base.OnInitializedAsync();
+        {
+            CreateDate = DateTime.Now,
+        };
     }
 
     public void ValidFormSubmited()
     {
-        var result = ManagementRepo.CreateSled(CreateSled);
-        if (result < 1)
+        Result = ManagementRepo.CreateSled(CreateSled);
+        if (!Result.Successful)
         {
-            Successful = false;
-            Message = "Error: No sled was created.";
             return;
         }
 
+        // TODO: add message of success
         CreateSled = new Sled()
-            {
-                CreateDate = DateTime.Now,
-            };
+        {
+            CreateDate = DateTime.Now,
+        };
     }
 }
