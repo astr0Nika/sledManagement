@@ -35,15 +35,23 @@
         <ValidationMessage For="@(() => ReserveModel.EndDate)" class="text-danger"></ValidationMessage>
     </div>
 
+    @if (!Successful)
+    {
+        <div class="alert alert-danger">@Message</div>
+    }
+
     <button type="submit" class="w-100 btn btn-lg btn-primary">Reserve</button>
 </EditForm>
 
 @code {
-
     private ReserveSledInputModel ReserveModel { get; set; }
+    private bool Successful { get; set; }
+    private string Message { get; set; }
 
     protected override void OnInitialized()
     {
+        Successful = true;
+        Message = "";
         ReserveModel = new()
             {
                 StartDate = DateTime.Now,
@@ -56,7 +64,9 @@
         var result = ManagementRepo.ReserveSled(ReserveModel);
         if (!result)
         {
-            // TODO: show message when failed
+            Successful = false;
+            Message = "Error: Reservation was not successfull.";
+            return;
         }
 
         ReserveModel = new()

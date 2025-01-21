@@ -22,14 +22,23 @@
         <ValidationMessage For="@(() => LoginModel.Password)" class="text-danger"></ValidationMessage>
     </div>
 
+    @if (!Successful)
+    {
+        <div class="alert alert-danger">@Message</div>
+    }
+
     <button type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
 </EditForm>
 
 @code {
     private InputModel LoginModel { get; set; }
+    private bool Successful { get; set; }
+    private string Message { get; set; }
 
     protected override void OnInitialized()
     {
+        Successful = true;
+        Message = "";
         LoginModel = new();
     }
 
@@ -38,7 +47,9 @@
         var result = ManagementRepo.LoginUser(LoginModel.Username, LoginModel.Password);
         if (!result)
         {
-            // TODO: show message when failed
+            Successful = false;
+            Message = "Error: Login not successfull.";
+            return;
         }
 
         // TODO: if admin, navigate to list of sleds

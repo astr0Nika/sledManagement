@@ -29,15 +29,26 @@
         <ValidationMessage For="() => CreateSled.Type" class="text-danger"/>
     </div>
 
+    @if (!Successful)
+    {
+        <div class="alert alert-danger">@Message</div>
+    }
+
     <button type="submit" class="w-100 btn btn-lg btn-primary">Create Sled</button>
 </EditForm>
 
 @code {
     // TODO: only admin can see this page
-    public Sled CreateSled { get; set; }
+
+    private Sled CreateSled { get; set; }
+    private bool Successful { get; set; }
+    private string Message { get; set; }
 
     protected override Task OnInitializedAsync()
     {
+        Successful = true;
+        Message = "";
+
         CreateSled = new Sled()
             {
                 CreateDate = DateTime.Now,
@@ -51,7 +62,9 @@
         var result = ManagementRepo.CreateSled(CreateSled);
         if (result < 1)
         {
-            // TODO: show message when failed
+            Successful = false;
+            Message = "Error: No sled was created.";
+            return;
         }
 
         CreateSled = new Sled()
